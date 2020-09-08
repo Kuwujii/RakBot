@@ -1,1 +1,2 @@
 # RakBot
+Discord Bot

@@ -11,9 +11,12 @@ class Background(discord.ext.commands.Cog): #Define cog class
     def cog_unload(self):
         self.status.cancel()
 
-    @discord.ext.tasks.loop(seconds = 5.0)
+    @discord.ext.tasks.loop(minutes = 30.0)
     async def status(self): #Change discord status of the bot once in a while
-        await self.RAKBOT.change_presence(activity = discord.Game(name = random.choice(["Temp", "Test"])))
+        await self.RAKBOT.change_presence(activity = discord.Game(name = random.choice([
+            f"monitoring {len(self.RAKBOT.guilds)} servers",
+            "with a ban hammer"
+            ])))
 
     @status.before_loop
     async def before_status(self): #Make the status loop wait for the bot to get ready to work

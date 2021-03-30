@@ -1,12 +1,14 @@
 import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wrapper, Commands Framework, Background loop Framework and Asyncio library
 import time #Other stuff
-import cogs.events, cogs.commands #Other cogs
+import cogs.tasks, cogs.events, cogs.commands #Other cogs
 
 class RakBotBase(discord.ext.commands.Cog): #Define cog class
     def __init__(self, RAKBOT):
         self.RAKBOT = RAKBOT
 
-        self.RAKBOT.add_cog(cogs.events.Events(self.RAKBOT)) #Run other cogs
+        self.RAKBOT.add_cog(cogs.tasks.Background(self.RAKBOT)) #Run other cogs
+        
+        self.RAKBOT.add_cog(cogs.events.Events(self.RAKBOT))
         
         self.RAKBOT.add_cog(cogs.commands.Tools(self.RAKBOT))
         self.RAKBOT.add_cog(cogs.commands.Fun(self.RAKBOT))

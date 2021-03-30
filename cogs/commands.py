@@ -2,7 +2,7 @@ import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wr
 import re, random, num2words #Other stuff
 import cogs.rakbotbase #Basic cog
 
-class Tools(discord.ext.commands.Cog): #Admin tools stuff
+class Tools(discord.ext.commands.Cog): #Admin tools stuffS
     def __init__(self, RAKBOT):
         self.RAKBOT = RAKBOT
 
@@ -24,6 +24,8 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
 
     @discord.ext.commands.command(pass_context = True, aliases = ["ms"])
     async def minesweeper(self, ctx, size: str = None, level: str = None): #Minesweeper minigame command
+        size, level = size.lower(), level.lower() #To lowercase
+
         sizes = ["small", "medium", "large", "random", "s", "m", "l", "r"]
         levels = ["basic", "easy", "normal", "hard", "insane", "random", "b", "e", "n", "h", "i", "r"]
 

@@ -10,8 +10,8 @@ class Events(discord.ext.commands.Cog): #Define cog class
         await self.RAKBOT.wait_until_ready()
         print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ RakBot v0.0.1 by Kuwujii: ON")
 
-    @discord.ext.commands.Cog.listener() #On message seen
-    async def on_message(self, message):
+    @discord.ext.commands.Cog.listener()
+    async def on_message(self, message): #On message seen
         words = message.content.lower().split() #Create array of words in message
         vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'ó'] #Array of vowels
         line_count = 0 #Syllabes in Haiku line

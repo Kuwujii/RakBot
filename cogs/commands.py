@@ -185,3 +185,48 @@ class DnD(discord.ext.commands.Cog): #Dungeons & Dragons stuff
         if isinstance(error, discord.ext.commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author.mention}\n`//dice <amount of dices><k/d><type of dice> <dis/advantage>*`")
             print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to roll a dice")
+    
+    @discord.ext.commands.command(pass_context = True, aliases = ["gs","generatestats"])
+    async def genstats(self, ctx): #Generate random stats command
+        results = []
+        message = ""
+        i = 0
+
+        while i < 6:
+            results.append([random.randint(1, 6),random.randint(1, 6),random.randint(1, 6),random.randint(1, 6)])
+            trimmed = results[i].copy()
+            trimmed.remove(min(trimmed))
+            trimsum = 0
+            for j in trimmed:
+                trimsum += int(j)
+            l = results[i].index(min(results[i]))
+            message += str(trimsum)+" = "
+            count = 0
+            for j in results[i]:
+                if count != l:
+                    message += "**"+str(results[i][count])+"**"
+                if count == l:
+                    message += str(results[i][count])
+                if count != 3:
+                    message += ", "
+                if count == 3:
+                    message += "\n"
+                count += 1
+            i+=1
+
+        i = 0
+        total = 0
+
+        while i < 24:
+            total += results[int(i/4)][int(i%4)]
+            i += 1
+        message += "Total: "+str(total)
+
+        await ctx.send(f"{ctx.author.mention}{message}")
+        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to generate stats")
+    
+    @genstats.error
+    async def genstats_error(self, ctx, error): #Stat generation command error
+        if isinstance(error, discord.ext.commands.MissingRequiredArgument):
+            await ctx.send(f"{ctx.author.mention}\n`//genstats*`")
+            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to generate stats")

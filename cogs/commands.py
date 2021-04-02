@@ -19,46 +19,46 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
 
     @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
-    async def help(self, ctx):
-        e = discord.Embed(colour = 0xFF6D00)
+    async def help(self, ctx): #General help command
+        e = discord.Embed(colour = 0xFF6D00) #Declare embed
         e.set_author(name = "RakBot commands help", icon_url = self.RAKBOT.user.avatar_url)
 
         for cog in self.RAKBOT.cogs:
             if self.RAKBOT.get_cog(cog).get_commands() != []:
-                e.add_field(name = cog, value = f"`//help {cog.lower()}`", inline = True)
+                e.add_field(name = cog, value = f"`//help {cog.lower()}`", inline = True) #Generate embed field for every cog containing commands
 
         await ctx.send(embed = e)
         print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) asked for help")
 
     @help.command(pass_context = True)
-    async def tools(self, ctx):
-        e = discord.Embed(colour = 0xFF6D00)
+    async def tools(self, ctx): #Tools cog help command
+        e = discord.Embed(colour = 0xFF6D00) #Declare embed
         e.set_author(name = "Tools commands usage", icon_url = self.RAKBOT.user.avatar_url)
 
         for command in self.RAKBOT.get_cog("Tools").get_commands():
-            e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False)
+            e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False) #Generate embed field for every command in cog
 
         await ctx.send(embed = e)
         print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) asked for help with tools commands")
 
     @help.command(pass_context = True)
-    async def fun(self, ctx):
-        e = discord.Embed(colour = 0xFF6D00)
+    async def fun(self, ctx): #Fun cog help command
+        e = discord.Embed(colour = 0xFF6D00) #Declare embed
         e.set_author(name = "Fun commands usage", icon_url = self.RAKBOT.user.avatar_url)
 
         for command in self.RAKBOT.get_cog("Fun").get_commands():
-            e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False)
+            e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False) #Generate embed field for every command in cog
 
         await ctx.send(embed = e)
         print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) asked for help with fun commands")
 
     @help.command(pass_context = True)
-    async def dnd(self, ctx):
-        e = discord.Embed(colour = 0xFF6D00)
+    async def dnd(self, ctx): #DnD cog help command
+        e = discord.Embed(colour = 0xFF6D00) #Declare embed
         e.set_author(name = "DnD commands usage", icon_url = self.RAKBOT.user.avatar_url)
 
         for command in self.RAKBOT.get_cog("DnD").get_commands():
-            e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False)
+            e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False) #Generate embed field for every command in cog
 
         await ctx.send(embed = e)
         print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) asked for help with DnD commands")
@@ -238,43 +238,33 @@ class Dnd(discord.ext.commands.Cog, name = "DnD"): #Dungeons & Dragons stuff
     async def generateStats(self, ctx): #Generate random stats command
         results = []
         message = ""
-        i = 0
 
-        while i < 6:
-            results.append([random.randint(1, 6),random.randint(1, 6),random.randint(1, 6),random.randint(1, 6)])
-            trimmed = results[i].copy()
-            trimmed.remove(min(trimmed))
-            trimsum = 0
-            for j in trimmed:
-                trimsum += int(j)
-            l = results[i].index(min(results[i]))
-            message += str(trimsum)+" = "
-            count = 0
-            for j in results[i]:
-                if count != l:
-                    message += "**"+str(results[i][count])+"**"
-                if count == l:
-                    message += str(results[i][count])
-                if count != 3:
-                    message += ", "
-                if count == 3:
-                    message += "\n"
-                count += 1
-            i+=1
+        for stat in range(0, 6): #For each stat
+            results.append([random.randint(1, 6), random.randint(1, 6), random.randint(1, 6), random.randint(1, 6)]) #Roll 4 times
+            trimmed = results[stat].copy()
+            trimmed.remove(min(trimmed)) #Get 3 highest results
+            trim_sum = 0
 
-        i = 0
+            message += f"{min(results[stat])} " #Add the lowest to the message
+
+            for roll in trimmed:
+                trim_sum += roll #Sum the highest rolls
+                message += f"**{roll}** " #Add them to the message
+
+            message += f"= {trim_sum}\n" #Add the sum to the message
+
         total = 0
 
-        while i < 24:
-            total += results[int(i/4)][int(i%4)]
-            i += 1
-        message += "Total: "+str(total)
+        for roll in range(0, 24): #Get the total roll score
+            total += results[int(roll/4)][int(roll%4)]
 
-        await ctx.send(f"{ctx.author.mention}{message}")
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) generated D&D stats")
+        message += f"Total: {total}" #Finish the message
+
+        await ctx.send(f"{ctx.author.mention}\n{message}")
+        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) generated DnD stats")
     
     @generateStats.error
     async def generateStats_error(self, ctx, error): #Stat generation command error
         if isinstance(error, discord.ext.commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author.mention}\n`//genstats*`")
-            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to generate stats")
+            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to generate DnD stats")

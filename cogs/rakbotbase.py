@@ -12,7 +12,7 @@ class RakBotBase(discord.ext.commands.Cog): #Define cog class
         
         self.RAKBOT.add_cog(cogs.commands.Tools(self.RAKBOT))
         self.RAKBOT.add_cog(cogs.commands.Fun(self.RAKBOT))
-        self.RAKBOT.add_cog(cogs.commands.DnD(self.RAKBOT))
+        self.RAKBOT.add_cog(cogs.commands.Dnd(self.RAKBOT))
 
 class Functions(): #Usefull functions
     def __init__(self):

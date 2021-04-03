@@ -87,6 +87,7 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
             warning = 0
             grid = [[]]
             message = ""
+            planted = 0
 
             if size in ["random", "r"]: #If they are random then roll
                 size = random.choice(["s", "m", "l"])
@@ -107,18 +108,23 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
                     grid.append([])
 
             if level in ["basic", "b"]: #Calculate the amount of bombs
-                level = round(size/4)
+                level = round((size**2)/14)
             elif level in ["easy", "e"]:
-                level = round(size/2)
+                level = round((size**2)/10)
             elif level in ["normal", "n"]:
-                level = size
+                level = round((size**2)/7)
             elif level in ["hard", "h"]:
-                level = size*2
+                level = round((size**2)/5)
             elif level in ["insane", "i"]:
-                level = size*4
+                level = round((size**2)/4)
 
-            for i in range(0, level): #Generate random bombs on the grid
-                grid[random.randint(0, size-1)][random.randint(0, size-1)] = "||:crab:||"
+            while planted < level: #Generate random bombs on the grid
+                random_x = random.randint(0, size-1)
+                random_y = random.randint(0, size-1)
+
+                if grid[random_x][random_y] != "||:crab:||":
+                    grid[random_x][random_y] = "||:crab:||"
+                    planted += 1
 
             for y in range(0, size): 
                 for x in range(0, size):
@@ -143,17 +149,13 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
                     message = "" #Clear it
                 else:
                     message += "\n" #New line
-
-            #TODO fix this to give correct numbers
-
-            # bombs = [round(size/4), round(size/2), size, size*2, size*4] #Bomb anount index
-            # difficulty = ((-0.2*size+6)*(4*(bombs.index(level)+1))+(4*(bombs.index(level)*(0.2*size-1)))-(0.2*size-1)) #Difficulty calculation
-
-            # if difficulty%10 == 0: #Divide difficulty /10
-            #     difficulty = int(difficulty/10) 
-            # else:
-            #     difficulty = difficulty/10
             
+            #TODO fix
+            # difficulty = round((size*(3472/135)) + (level*(91/4)) + ((size*level)*(-91/540)) + (round(level/size)*(-1547/108)) + (round((size+level)/2)*(-4145/108)))/10
+
+            # if difficulty%1 == 0:
+            #     difficulty = int(difficulty)
+
             # message = f"Difficulty: ||{difficulty}||/10" #Difficulty message
             # await ctx.send(message)
             print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) plays minesweeper")

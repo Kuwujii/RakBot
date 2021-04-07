@@ -8,7 +8,7 @@ class Events(discord.ext.commands.Cog): #Define cog class
     @discord.ext.commands.Cog.listener() #On ready event
     async def on_ready(self):
         await self.RAKBOT.wait_until_ready()
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ Running {self.RAKBOT.user.name} on RakBot core v0.0.1")
+        cogs.rakbotbase.Functions().write_log(f"Running {self.RAKBOT.user.name} on RakBot core v0.0.1")
 
     @discord.ext.commands.Cog.listener()
     async def on_message(self, message): #On message seen
@@ -50,7 +50,7 @@ class Events(discord.ext.commands.Cog): #Define cog class
                     output += word+"." #Finish output
                     
                     await message.channel.send(f"**{title}**\n\n*{output}*\n     ~ {message.author.mention}") #Send the Hiku
-                    print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {message.author.display_name} ({message.author}) accidentally wrote a Haiku")
+                    cogs.rakbotbase.Functions().write_log(f"{message.author.display_name} ({message.author}) accidentally wrote a Haiku")
                 else: #Else not a Hiku
                     break
         
@@ -65,7 +65,6 @@ class Events(discord.ext.commands.Cog): #Define cog class
                     line_count = 0 #Reset syllabes in line
                 else: #Else not a Haiku
                     break
-            
             else: #Else not a Haiku
                 break
         

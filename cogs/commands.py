@@ -10,13 +10,13 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
     @discord.ext.commands.is_owner() #If owner
     async def off(self, ctx): #Turn off comand
         await ctx.send(f"Turning off now")
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ Turning off")
+        cogs.rakbotbase.Functions().write_log(f"Turning off")
         await self.RAKBOT.close() #Turn off
 
     @off.error
     async def off_error(self, ctx): #If off failed
         await ctx.send(f"You're not permited to do this")
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
 
     @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
     async def help(self, ctx): #General help command
@@ -28,7 +28,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
                 e.add_field(name = cog, value = f"`//help {cog.lower()}`", inline = True) #Generate embed field for every cog containing commands
 
         await ctx.send(embed = e)
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) asked for help")
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help")
 
     @help.command(pass_context = True)
     async def tools(self, ctx): #Tools cog help command
@@ -39,7 +39,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
             e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False) #Generate embed field for every command in cog
 
         await ctx.send(embed = e)
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) asked for help with tools commands")
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help with tools commands")
 
     @help.command(pass_context = True)
     async def fun(self, ctx): #Fun cog help command
@@ -50,7 +50,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
             e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False) #Generate embed field for every command in cog
 
         await ctx.send(embed = e)
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) asked for help with fun commands")
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help with fun commands")
 
     @help.command(pass_context = True)
     async def dnd(self, ctx): #DnD cog help command
@@ -61,7 +61,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
             e.add_field(name = command.name.capitalize(), value = f"```css\n //{command} {command.description}```", inline = False) #Generate embed field for every command in cog
 
         await ctx.send(embed = e)
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) asked for help with DnD commands")
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help with DnD commands")
 
 class Fun(discord.ext.commands.Cog): #Fun stuff
     def __init__(self, RAKBOT):
@@ -77,12 +77,9 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
         if size in levels and level in sizes:
             size, level = level, size
 
-        if size not in sizes:
+        if (size not in sizes) or (level not in levels):
             await ctx.send(f"{ctx.author.mention}\n`//saper <size> <level>`")
-            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to play minesweeper")
-        elif level not in levels:
-            await ctx.send(f"{ctx.author.mention}\n`//saper <size> <level>`")
-            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to play minesweeper")
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to play minesweeper")
         else: #If size and level are valid
             warning = 0
             grid = [[]]
@@ -158,13 +155,13 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
 
             # message = f"Difficulty: ||{difficulty}||/10" #Difficulty message
             # await ctx.send(message)
-            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) plays minesweeper")
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) plays minesweeper")
     
     @minesweeper.error
     async def minesweeper_error(self, ctx, error): #If off failed
         if isinstance(error, discord.ext.commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author.mention}\n`//saper <size> <level>`")
-            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to play minesweeper")
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to play minesweeper")
 
 class Dnd(discord.ext.commands.Cog, name = "DnD"): #Dungeons & Dragons stuff
     def __init__(self, RAKBOT):
@@ -216,25 +213,25 @@ class Dnd(discord.ext.commands.Cog, name = "DnD"): #Dungeons & Dragons stuff
                             else:
                                 message += str(results[i])+" **"+str(bonus_results[i])+"**\n"
                     await ctx.send(f"{message}{ctx.author.mention}")
-                    print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) rolled a dice")
+                    cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) rolled a dice")
                 else:
                     await ctx.send(f"{ctx.author.mention} Invalid bonus")
-                    print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to roll a dice")
+                    cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to roll a dice")
                     
             else: #If there is no bonus
                 for i in results: #For the amount of results
                     message += "**"+str(i)+"**\n" #Add them to message
                 await ctx.send(f"{message}{ctx.author.mention}")
-                print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) rolled a dice")
+                cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) rolled a dice")
         else:
             await ctx.send(f"{ctx.author.mention} Invalid dice")
-            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to roll a dice")
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to roll a dice")
     
     @dice.error
     async def dice_error(self, ctx, error): #Dice roll command error
         if isinstance(error, discord.ext.commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author.mention}\n`//dice <amount of dices><k/d><type of dice>+<multiplier> <dis/advantage>`")
-            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to roll a dice")
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to roll a dice")
     
     @discord.ext.commands.command(pass_context = True, aliases = ["gs"])
     async def generateStats(self, ctx): #Generate random stats command
@@ -263,10 +260,10 @@ class Dnd(discord.ext.commands.Cog, name = "DnD"): #Dungeons & Dragons stuff
         message += f"Total: {total}" #Finish the message
 
         await ctx.send(f"{ctx.author.mention}\n{message}")
-        print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) generated DnD stats")
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) generated DnD stats")
     
     @generateStats.error
     async def generateStats_error(self, ctx, error): #Stat generation command error
         if isinstance(error, discord.ext.commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author.mention}\n`//genstats*`")
-            print(f"[{cogs.rakbotbase.Functions().log_time()}] ~ {ctx.author.display_name} ({ctx.author}) failed to generate DnD stats")
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to generate DnD stats")

@@ -19,9 +19,9 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         await ctx.send(f"You're not permited to do this")
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
 
-    @discord.ext.commands.group(pass_context = True)
+    @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
     async def language(self, ctx): #Check the language of the server
-        await ctx.send(SERVER_SETTINGS.find_one({"_id": ctx.guild.id})["language"])
+        await ctx.send(self.SERVER_SETTINGS.find_one({"_id": ctx.guild.id})["language"])
 
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) checked the language of the {ctx.guild.name} server")
 
@@ -37,6 +37,10 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
             if lang_data["icon"]["type"] == "ascii": #Format nice field about it
                 e.add_field(name = f"{lang_data['icon']['ascii']} {lang_data['language']} ({lang_data['region']})", value = "_ _", inline = False)
+            elif lang_data["icon"]["type"] == "discord" and lang_data['icon']['id'] != None:
+                e.add_field(name = f"{self.RAKBOT.get_emoji(lang_data['icon']['id'])} {lang_data['language']} ({lang_data['region']})", value = "_ _", inline = False)
+            else:
+                e.add_field(name = f"{lang_data['language']} ({lang_data['region']})", value = "_ _", inline = False)
 
             lang_file.close()
 
@@ -47,7 +51,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
     @discord.ext.commands.has_permissions(administrator = True)
     async def language_set(self, ctx, language: str): #Set the language for the current server
         if f"{language}.json" in os.listdir("../lang"): #If the language exists
-            SERVER_SETTINGS.update_one({"_id": ctx.guild.id}, {"$set": {"language": language}}) #Change the value in the database
+            self.SERVER_SETTINGS.update_one({"_id": ctx.guild.id}, {"$set": {"language": language}}) #Change the value in the database
 
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) set a new language for the server {ctx.guild.name}")
 

@@ -2,13 +2,22 @@ import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wr
 import cogs.rakbotbase #Basic cog
 
 class Events(discord.ext.commands.Cog): #Define cog class
-    def __init__(self, RAKBOT):
+    def __init__(self, RAKBOT, SERVER_SETTINGS):
         self.RAKBOT = RAKBOT
+        self.SERVER_SETTINGS = SERVER_SETTINGS
 
     @discord.ext.commands.Cog.listener() #On ready event
     async def on_ready(self):
         await self.RAKBOT.wait_until_ready()
         cogs.rakbotbase.Functions().write_log(f"Running {self.RAKBOT.user.name} on RakBot core v0.0.1")
+
+    @discord.ext.commands.Cog.listener() #Set default language as British English when joining the server
+    async def on_guild_join(self, guild):
+        self.SERVER_SETTINGS.insert_one({"_id": guild.id, "language": "en_GB"})
+
+    @discord.ext.commands.Cog.listener() #Remove server settings when kicked from it
+    async def on_guild_remove(self, guild):
+        self.SERVER_SETTINGS.delete_one({"_id": guild.id})
 
     @discord.ext.commands.Cog.listener()
     async def on_message(self, message): #On message seen

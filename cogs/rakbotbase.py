@@ -5,16 +5,17 @@ import cogs.tasks, cogs.events, cogs.commands #Other cogs
 START_TIME = time.strftime("%d-%m-%Y_%H-%M-%S")
 
 class RakBotBase(discord.ext.commands.Cog): #Define cog class
-    def __init__(self, RAKBOT):
+    def __init__(self, RAKBOT, SERVER_SETTINGS):
         self.RAKBOT = RAKBOT
+        self.SERVER_SETTINGS = SERVER_SETTINGS
 
         Functions().init_log_file()
 
         self.RAKBOT.add_cog(cogs.tasks.Background(self.RAKBOT)) #Run other cogs
         
-        self.RAKBOT.add_cog(cogs.events.Events(self.RAKBOT))
+        self.RAKBOT.add_cog(cogs.events.Events(self.RAKBOT, self.SERVER_SETTINGS))
         
-        self.RAKBOT.add_cog(cogs.commands.Tools(self.RAKBOT))
+        self.RAKBOT.add_cog(cogs.commands.Tools(self.RAKBOT, self.SERVER_SETTINGS))
         self.RAKBOT.add_cog(cogs.commands.Fun(self.RAKBOT))
         self.RAKBOT.add_cog(cogs.commands.Dnd(self.RAKBOT))
 
@@ -40,7 +41,7 @@ class Functions(): #Usefull functions
 
     def write_log(self, log_text): #Write logs to the file and print them on the console
         log_text = f"[{Functions().log_time()}] ~ {log_text}"
-
+        
         log_file = open(f"{START_TIME}.log", "a")
         log_file.write(f"{log_text}\n")
         log_file.close()

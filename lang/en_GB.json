@@ -1,0 +1,16 @@
+{
+    "language": "English",
+    "region": "Great Britain",
+    "icon": {
+        "type": "ascii",
+        "ascii": "🇬🇧"
+    },
+    "tools": {
+        "name": "Tools",
+        "off": {
+            "aliases": "off",
+            "message": "Turning off now...",
+            "error": "You're not permited to do this"
+        }
+    }
+}

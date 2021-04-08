@@ -1,15 +1,16 @@
 import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wrapper, Commands Framework, Background loop Framework and Asyncio library
-import re, random, num2words #Other stuff
+import json, glob, os, re, random, num2words #Other stuff
 import cogs.rakbotbase #Basic cog
 
 class Tools(discord.ext.commands.Cog): #Admin tools stuffS
-    def __init__(self, RAKBOT):
+    def __init__(self, RAKBOT, SERVER_SETTINGS):
         self.RAKBOT = RAKBOT
+        self.SERVER_SETTINGS = SERVER_SETTINGS
 
     @discord.ext.commands.command(pass_context = True)
     @discord.ext.commands.is_owner() #If owner
     async def off(self, ctx): #Turn off comand
-        await ctx.send(f"Turning off now")
+        await ctx.send(f"Turning off now...")
         cogs.rakbotbase.Functions().write_log(f"Turning off")
         await self.RAKBOT.close() #Turn off
 
@@ -17,6 +18,38 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
     async def off_error(self, ctx): #If off failed
         await ctx.send(f"You're not permited to do this")
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
+
+    @discord.ext.commands.group(pass_context = True)
+    async def language(self, ctx): #Check the language of the server
+        await ctx.send(SERVER_SETTINGS.find_one({"_id": ctx.guild.id})["language"])
+
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) checked the language of the {ctx.guild.name} server")
+
+    @language.command(pass_context = True, name = "list")
+    @discord.ext.commands.has_permissions(administrator = True)
+    async def language_list(self, ctx): #Check all the available languages
+        e = discord.Embed(colour = 0xFF6D00) #Declare embed
+        e.set_author(name = "Available languages", icon_url = self.RAKBOT.user.avatar_url)
+
+        for lang_file in os.listdir("../lang"): #Loop through all the languages
+            lang_file = open(f"../lang/{lang_file}")
+            lang_data = json.load(lang_file)
+
+            if lang_data["icon"]["type"] == "ascii": #Format nice field about it
+                e.add_field(name = f"{lang_data['icon']['ascii']} {lang_data['language']} ({lang_data['region']})", value = "_ _", inline = False)
+
+            lang_file.close()
+
+        await ctx.send(embed = e) #Send it
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for list of languages")
+
+    @language.command(pass_context = True, name = "set")
+    @discord.ext.commands.has_permissions(administrator = True)
+    async def language_set(self, ctx, language: str): #Set the language for the current server
+        if f"{language}.json" in os.listdir("../lang"): #If the language exists
+            SERVER_SETTINGS.update_one({"_id": ctx.guild.id}, {"$set": {"language": language}}) #Change the value in the database
+
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) set a new language for the server {ctx.guild.name}")
 
     @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
     async def help(self, ctx): #General help command
@@ -30,8 +63,8 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         await ctx.send(embed = e)
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help")
 
-    @help.command(pass_context = True)
-    async def tools(self, ctx): #Tools cog help command
+    @help.command(pass_context = True, name = "tools")
+    async def help_tools(self, ctx): #Tools cog help command
         e = discord.Embed(colour = 0xFF6D00) #Declare embed
         e.set_author(name = "Tools commands usage", icon_url = self.RAKBOT.user.avatar_url)
 
@@ -41,8 +74,8 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         await ctx.send(embed = e)
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help with tools commands")
 
-    @help.command(pass_context = True)
-    async def fun(self, ctx): #Fun cog help command
+    @help.command(pass_context = True, name = "fun")
+    async def help_fun(self, ctx): #Fun cog help command
         e = discord.Embed(colour = 0xFF6D00) #Declare embed
         e.set_author(name = "Fun commands usage", icon_url = self.RAKBOT.user.avatar_url)
 
@@ -52,8 +85,8 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         await ctx.send(embed = e)
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help with fun commands")
 
-    @help.command(pass_context = True)
-    async def dnd(self, ctx): #DnD cog help command
+    @help.command(pass_context = True, name = "dnd")
+    async def help_dnd(self, ctx): #DnD cog help command
         e = discord.Embed(colour = 0xFF6D00) #Declare embed
         e.set_author(name = "DnD commands usage", icon_url = self.RAKBOT.user.avatar_url)
 

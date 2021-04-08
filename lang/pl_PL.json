@@ -1,0 +1,16 @@
+{
+    "language": "Polski",
+    "region": "Polska",
+    "icon": {
+        "type": "ascii",
+        "ascii": "🇵🇱"
+    },
+    "tools": {
+        "name": "Narzędzia",
+        "off": {
+            "aliases": "wyłącz",
+            "message": "Wyłączanie...",
+            "error": "Nie jesteś do tego upoważniony"
+        }
+    }
+}

@@ -22,7 +22,7 @@
             "set": {
                 "name": "set",
                 "aliases": ["s"],
-                "message": "Server language got set to English (Australia)",
+                "message": "Server language set to English (Australia)",
                 "error": "Choosen language isn't supported"
             }
         }

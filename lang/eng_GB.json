@@ -1,14 +1,12 @@
 {
     "language": "English",
     "region": "Great Britain",
-    "icon": {
-        "type": "ascii",
-        "ascii": "🇬🇧"
-    },
+    "icon": "🇬🇧",
     "tools": {
         "name": "Tools",
         "off": {
-            "aliases": "off",
+            "name": "off",
+            "aliases": [],
             "message": "Turning off now...",
             "error": "You're not permited to do this"
         }

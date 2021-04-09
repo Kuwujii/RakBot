@@ -1,6 +1,5 @@
 import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wrapper, Commands Framework, Background loop Framework and Asyncio library
 import random #Other stuff
-import cogs.rakbotbase #Basic cog
 
 class Background(discord.ext.commands.Cog): #Define cog class
     def __init__(self, RAKBOT):

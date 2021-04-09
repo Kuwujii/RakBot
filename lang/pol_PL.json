@@ -1,14 +1,12 @@
 {
     "language": "Polski",
     "region": "Polska",
-    "icon": {
-        "type": "ascii",
-        "ascii": "🇵🇱"
-    },
+    "icon": "🇵🇱",
     "tools": {
         "name": "Narzędzia",
         "off": {
-            "aliases": "wyłącz",
+            "name": "wyłącz",
+            "aliases": ["wył"],
             "message": "Wyłączanie...",
             "error": "Nie jesteś do tego upoważniony"
         }

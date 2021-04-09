@@ -1,15 +1,13 @@
 {
     "language": "Ślůnski",
     "region": "Polsko",
-    "icon": {
-        "type": "discord",
-        "id": 829857095234486273
-    },
+    "icon": "🇵🇱",
     "tools": {
         "name": "Nŏczyniŏ",
         "off": {
-            "aliases": "wyłōncz",
-            "message": "wyłōnczanie...",
+            "name": "wyłōncz",
+            "aliases": ["wył"],
+            "message": "Wyłōnczanie...",
             "error": "Niy je żeś do tego upoważniōny"
         }
     }

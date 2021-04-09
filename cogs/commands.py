@@ -3,20 +3,36 @@ import json, glob, os, re, random, num2words #Other stuff
 import cogs.rakbotbase #Basic cog
 
 class Tools(discord.ext.commands.Cog): #Admin tools stuffS
-    def __init__(self, RAKBOT, SERVER_SETTINGS):
+    def __init__(self, RAKBOT, MONGO, SERVER_SETTINGS):
         self.RAKBOT = RAKBOT
+        self.MONGO = MONGO
         self.SERVER_SETTINGS = SERVER_SETTINGS
 
-    @discord.ext.commands.command(pass_context = True)
+    @discord.ext.commands.command(pass_context = True, 
+    aliases = list(set([ #Remove duplicates and assign them
+        json.load(open(f"./lang/{lang_file_name}"))["tools"]["off"]["name"] for lang_file_name in os.listdir("./lang") 
+            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["off"]["name"] != "off" #Generate a list of names from all languages. Exclude default name
+    ] + [ #Merge the two lists
+        alias for lang_file_name in os.listdir("./lang") 
+            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["off"]["aliases"] #Generate a list of aliases from all languages
+    ])))
     @discord.ext.commands.is_owner() #If owner
-    async def off(self, ctx): #Turn off comand
-        await ctx.send(f"Turning off now...")
-        cogs.rakbotbase.Functions().write_log(f"Turning off")
-        await self.RAKBOT.close() #Turn off
+    async def off(self, ctx, jo): #Turn off comand
+        file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
+        await ctx.send(json.load(file)["tools"]["off"]["message"]) #Send correct message
+        file.close()
+
+        cogs.rakbotbase.Functions().write_log("Turning off") #Send logs
+
+        self.MONGO.close() #Close connection to the database
+        await self.RAKBOT.close() #Turn off the bot
 
     @off.error
     async def off_error(self, ctx): #If off failed
-        await ctx.send(f"You're not permited to do this")
+        file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
+        await ctx.send(json.load(file)["tools"]["off"]["error"]) #Send correct message
+        file.close()
+
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
 
     @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
@@ -31,16 +47,11 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         e = discord.Embed(colour = 0xFF6D00) #Declare embed
         e.set_author(name = "Available languages", icon_url = self.RAKBOT.user.avatar_url)
 
-        for lang_file in os.listdir("../lang"): #Loop through all the languages
-            lang_file = open(f"../lang/{lang_file}")
+        for lang_file_name in os.listdir("../lang"): #Loop through all the languages
+            lang_file = open(f"../lang/{lang_file_name}")
             lang_data = json.load(lang_file)
 
-            if lang_data["icon"]["type"] == "ascii": #Format nice field about it
-                e.add_field(name = f"{lang_data['icon']['ascii']} {lang_data['language']} ({lang_data['region']})", value = "_ _", inline = False)
-            elif lang_data["icon"]["type"] == "discord" and lang_data['icon']['id'] != None:
-                e.add_field(name = f"{self.RAKBOT.get_emoji(lang_data['icon']['id'])} {lang_data['language']} ({lang_data['region']})", value = "_ _", inline = False)
-            else:
-                e.add_field(name = f"{lang_data['language']} ({lang_data['region']})", value = "_ _", inline = False)
+            e.add_field(name = f"{lang_data['icon']} {lang_data['language']} ({lang_data['region']})", value = f"`{lang_file_name[:-5]}`", inline = False)
 
             lang_file.close()
 
@@ -184,14 +195,6 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
                 else:
                     message += "\n" #New line
             
-            #TODO fix
-            # difficulty = round((size*(3472/135)) + (level*(91/4)) + ((size*level)*(-91/540)) + (round(level/size)*(-1547/108)) + (round((size+level)/2)*(-4145/108)))/10
-
-            # if difficulty%1 == 0:
-            #     difficulty = int(difficulty)
-
-            # message = f"Difficulty: ||{difficulty}||/10" #Difficulty message
-            # await ctx.send(message)
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) plays minesweeper")
     
     @minesweeper.error

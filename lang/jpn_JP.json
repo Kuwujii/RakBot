@@ -1,14 +1,12 @@
 {
     "language": "日本語",
     "region": "日本",
-    "icon": {
-        "type": "ascii",
-        "ascii": "🇯🇵"
-    },
+    "icon": "🇯🇵",
     "tools": {
         "name": "ツール",
         "off": {
-            "aliases": "off",
+            "name": "off",
+            "aliases": [],
             "message": "ボットをOFFにします...",
             "error": "コマンドが許可されていません"
         }

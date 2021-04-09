@@ -14,15 +14,17 @@ class Events(discord.ext.commands.Cog): #Define cog class
     @discord.ext.commands.Cog.listener() #Set default language as British English when joining the server
     async def on_guild_join(self, guild):
         self.SERVER_SETTINGS.insert_one({"_id": guild.id, "language": "en_GB"})
+        cogs.rakbotbase.Functions().write_log(f"Got invited to {guild.name} server")
 
     @discord.ext.commands.Cog.listener() #Remove server settings when kicked from it
     async def on_guild_remove(self, guild):
         self.SERVER_SETTINGS.delete_one({"_id": guild.id})
+        cogs.rakbotbase.Functions().write_log(f"Got kicked from {guild.name} server")
 
     @discord.ext.commands.Cog.listener()
     async def on_message(self, message): #On message seen
         words = message.content.lower().split() #Create array of words in message
-        vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'ó'] #Array of vowels
+        vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'ą', 'ę', 'ó'] #Array of vowels
         line_count = 0 #Syllabes in Haiku line
         line = 1 #Current Haiku line
         output = "" #Output

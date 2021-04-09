@@ -14,4 +14,4 @@ if __name__ == "__main__": #Must be main file
     RAKBOT = discord.ext.commands.Bot(ini.get("General", "CommandPrefix"), help_command = None) #Decare the bot         
     RAKBOT.add_cog(cogs.rakbotbase.RakBotBase(RAKBOT, SERVER_SETTINGS))
     
-    RAKBOT.run(ini.get("General", "Token")) #Login
+    asyncio.get_event_loop().run_until_complete(RAKBOT.start(ini.get("General", "Token"))) #Login

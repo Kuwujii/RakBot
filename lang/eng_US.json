@@ -8,7 +8,7 @@
             "name": "off",
             "aliases": [],
             "message": "Turning off now...",
-            "error": "You're not permited to do this"
+            "error": "You do not have permission to perform this action"
         },
         "language": {
             "name": "language",
@@ -23,7 +23,7 @@
                 "name": "set",
                 "aliases": ["s"],
                 "message": "Server language set to English (United States)",
-                "error": "Choosen language isn't supported"
+                "error": "Chosen language isn't supported"
             }
         }
     }

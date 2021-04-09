@@ -9,6 +9,22 @@
             "aliases": [],
             "message": "Turning off now...",
             "error": "You're not permited to do this"
+        },
+        "language": {
+            "name": "language",
+            "aliases": ["lang"],
+            "message": "Server language is set to: English (Great Britain)",
+            "list": {
+                "name": "list",
+                "aliases": ["l"],
+                "message": "Available languages"
+            },
+            "set": {
+                "name": "set",
+                "aliases": ["s"],
+                "message": "Server language got set to English (Great Britain)",
+                "error": "Choosen language isn't supported"
+            }
         }
     }
 }

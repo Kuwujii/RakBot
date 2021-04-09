@@ -9,6 +9,22 @@
             "aliases": [],
             "message": "ボットをOFFにします...",
             "error": "コマンドが許可されていません"
+        },
+        "language": {
+            "name": "language",
+            "aliases": ["lang"],
+            "message": "Server language is set to: 日本語 (日本)",
+            "list": {
+                "name": "list",
+                "aliases": ["l"],
+                "message": "Available languages"
+            },
+            "set": {
+                "name": "set",
+                "aliases": ["s"],
+                "message": "Server language got set to 日本語 (日本)",
+                "error": "Choosen language isn't supported"
+            }
         }
     }
 }

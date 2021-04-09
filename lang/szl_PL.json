@@ -9,6 +9,22 @@
             "aliases": ["wył"],
             "message": "Wyłōnczanie...",
             "error": "Niy je żeś do tego upoważniōny"
+        },
+        "language": {
+            "name": "gŏdka",
+            "aliases": [],
+            "message": "Gŏdka serwera je ustawiōny na: Ślůnski (Polsko)",
+            "list": {
+                "name": "lista",
+                "aliases": ["l"],
+                "message": "Dostympne gŏdki"
+            },
+            "set": {
+                "name": "ustaw",
+                "aliases": ["u"],
+                "message": "Gŏdka serwera ôstoł ustawiōny na Ślōnski (Polsko)",
+                "error": "Ôbranŏ gŏdka niyma ôbsugowany"
+            }
         }
     }
 }

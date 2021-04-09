@@ -2,11 +2,15 @@ import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wr
 import json, glob, os, re, random, num2words #Other stuff
 import cogs.rakbotbase #Basic cog
 
+#====================Tools cog====================#
+
 class Tools(discord.ext.commands.Cog): #Admin tools stuffS
     def __init__(self, RAKBOT, MONGO, SERVER_SETTINGS):
         self.RAKBOT = RAKBOT
         self.MONGO = MONGO
         self.SERVER_SETTINGS = SERVER_SETTINGS
+
+    #----------off command----------#
 
     @discord.ext.commands.command(pass_context = True, 
     aliases = list(set([ #Remove duplicates and assign them
@@ -17,7 +21,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
             for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["off"]["aliases"] #Generate a list of aliases from all languages
     ])))
     @discord.ext.commands.is_owner() #If owner
-    async def off(self, ctx, jo): #Turn off comand
+    async def off(self, ctx): #Turn off comand
         file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
         await ctx.send(json.load(file)["tools"]["off"]["message"]) #Send correct message
         file.close()
@@ -35,17 +39,38 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
 
-    @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
+    #----------language command----------#
+
+    @discord.ext.commands.group(pass_context = True, invoke_without_command = True,
+    aliases = list(set([ #Remove duplicates and assign them
+        json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["name"] for lang_file_name in os.listdir("./lang") 
+            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["name"] != "language" #Generate a list of names from all languages. Exclude default name
+    ] + [ #Merge the two lists
+        alias for lang_file_name in os.listdir("./lang") 
+            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["aliases"] #Generate a list of aliases from all languages
+    ])))
     async def language(self, ctx): #Check the language of the server
-        await ctx.send(self.SERVER_SETTINGS.find_one({"_id": ctx.guild.id})["language"])
+        file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
+        await ctx.send(json.load(file)["tools"]["language"]["message"]) #Send correct message
+        file.close()
 
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) checked the language of the {ctx.guild.name} server")
 
-    @language.command(pass_context = True, name = "list")
+    @language.command(pass_context = True, name = "list",
+    aliases = list(set([ #Remove duplicates and assign them
+        json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["list"]["name"] for lang_file_name in os.listdir("./lang") 
+            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["list"]["name"] != "list" #Generate a list of names from all languages. Exclude default name
+    ] + [ #Merge the two lists
+        alias for lang_file_name in os.listdir("./lang") 
+            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["list"]["aliases"] #Generate a list of aliases from all languages
+    ])))
     @discord.ext.commands.has_permissions(administrator = True)
     async def language_list(self, ctx): #Check all the available languages
         e = discord.Embed(colour = 0xFF6D00) #Declare embed
-        e.set_author(name = "Available languages", icon_url = self.RAKBOT.user.avatar_url)
+
+        file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
+        e.set_author(name = json.load(file)["tools"]["language"]["list"]["message"], icon_url = self.RAKBOT.user.avatar_url)
+        file.close()
 
         for lang_file_name in os.listdir("../lang"): #Loop through all the languages
             lang_file = open(f"../lang/{lang_file_name}")
@@ -58,13 +83,32 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         await ctx.send(embed = e) #Send it
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for list of languages")
 
-    @language.command(pass_context = True, name = "set")
+    @language.command(pass_context = True, name = "set",
+    aliases = list(set([ #Remove duplicates and assign them
+        json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["set"]["name"] for lang_file_name in os.listdir("./lang") 
+            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["set"]["name"] != "set" #Generate a list of names from all languages. Exclude default name
+    ] + [ #Merge the two lists
+        alias for lang_file_name in os.listdir("./lang") 
+            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["set"]["aliases"] #Generate a list of aliases from all languages
+    ])))
     @discord.ext.commands.has_permissions(administrator = True)
     async def language_set(self, ctx, language: str): #Set the language for the current server
         if f"{language}.json" in os.listdir("../lang"): #If the language exists
             self.SERVER_SETTINGS.update_one({"_id": ctx.guild.id}, {"$set": {"language": language}}) #Change the value in the database
 
+            file = open(f"../lang/{language}.json")
+            await ctx.send(json.load(file)["tools"]["language"]["set"]["message"])
+            file.close()
+
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) set a new language for the server {ctx.guild.name}")
+        else:
+            file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
+            await ctx.send(json.load(file)["tools"]["language"]["set"]["error"])
+            file.close()
+
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to set a new language for the server {ctx.guild.name}")
+
+    #----------help command----------#
 
     @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
     async def help(self, ctx): #General help command
@@ -111,9 +155,12 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         await ctx.send(embed = e)
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help with DnD commands")
 
+
+
 class Fun(discord.ext.commands.Cog): #Fun stuff
     def __init__(self, RAKBOT):
         self.RAKBOT = RAKBOT
+
 
     @discord.ext.commands.command(pass_context = True, aliases = ["ms"], description = "<size> <level>")
     async def minesweeper(self, ctx, size: str, level: str): #Minesweeper minigame command
@@ -203,9 +250,12 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
             await ctx.send(f"{ctx.author.mention}\n`//saper <size> <level>`")
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to play minesweeper")
 
+
+
 class Dnd(discord.ext.commands.Cog, name = "DnD"): #Dungeons & Dragons stuff
     def __init__(self, RAKBOT):
         self.RAKBOT = RAKBOT
+
 
     @discord.ext.commands.command(pass_context = True, description = "[amount]<k/d><sides>[+multiplier] [dis/advantage]")
     async def dice(self, ctx, dice: str, bonus = None): #Dice roll command
@@ -272,7 +322,8 @@ class Dnd(discord.ext.commands.Cog, name = "DnD"): #Dungeons & Dragons stuff
         if isinstance(error, discord.ext.commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author.mention}\n`//dice <amount of dices><k/d><type of dice>+<multiplier> <dis/advantage>`")
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to roll a dice")
-    
+
+
     @discord.ext.commands.command(pass_context = True, aliases = ["gs"])
     async def generateStats(self, ctx): #Generate random stats command
         results = []

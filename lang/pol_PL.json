@@ -9,6 +9,22 @@
             "aliases": ["wył"],
             "message": "Wyłączanie...",
             "error": "Nie jesteś do tego upoważniony"
+        },
+        "language": {
+            "name": "język",
+            "aliases": [],
+            "message": "Język serwera jest ustawiony na: Polski (Polska)",
+            "list": {
+                "name": "lista",
+                "aliases": ["l"],
+                "message": "Dostępne języki"
+            },
+            "set": {
+                "name": "ustaw",
+                "aliases": ["u"],
+                "message": "Język serwera został ustawiony na Polski (Polska)",
+                "error": "Wybrany język nie jest obsługiwany"
+            }
         }
     }
 }

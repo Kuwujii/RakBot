@@ -2,15 +2,11 @@ import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wr
 import json, glob, os, re, random, num2words #Other stuff
 import cogs.rakbotbase #Basic cog
 
-#====================Tools cog====================#
-
 class Tools(discord.ext.commands.Cog): #Admin tools stuffS
     def __init__(self, RAKBOT, MONGO, SERVER_SETTINGS):
         self.RAKBOT = RAKBOT
         self.MONGO = MONGO
         self.SERVER_SETTINGS = SERVER_SETTINGS
-
-    #----------off command----------#
 
     @discord.ext.commands.command(pass_context = True, 
     aliases = list(set([ #Remove duplicates and assign them
@@ -38,8 +34,6 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         file.close()
 
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
-
-    #----------language command----------#
 
     @discord.ext.commands.group(pass_context = True, invoke_without_command = True,
     aliases = list(set([ #Remove duplicates and assign them
@@ -108,7 +102,22 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to set a new language for the server {ctx.guild.name}")
 
-    #----------help command----------#
+    @discord.ext.commands.command(pass_context = True, name = "shout")
+    async def shout(self, ctx, member: discord.Member):
+        self.RAKBOT.get_cog("Background").start_shouting_at(member)
+        await ctx.send(f"Hey {member.mention}, wake up!")
+        cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) shouts at {member.display_name} ({member})")
+
+    @discord.ext.commands.command(pass_context = True, name = "quiet")
+    async def quiet(self, ctx, member: discord.Member = None):
+        if member == None:
+            member = ctx.author
+            await ctx.send("Ok")
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) showed up and wanted me to stop shouting")
+        else:
+            await ctx.send(f"Hey {member.mention}, no need to wake up anymore")
+            cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) stops shouting at {member.display_name} ({member})")
+        self.RAKBOT.get_cog("Background").stop_shouting_at(member)
 
     @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
     async def help(self, ctx): #General help command
@@ -155,12 +164,9 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         await ctx.send(embed = e)
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for help with DnD commands")
 
-
-
 class Fun(discord.ext.commands.Cog): #Fun stuff
     def __init__(self, RAKBOT):
         self.RAKBOT = RAKBOT
-
 
     @discord.ext.commands.command(pass_context = True, aliases = ["ms"], description = "<size> <level>")
     async def minesweeper(self, ctx, size: str, level: str): #Minesweeper minigame command
@@ -250,12 +256,9 @@ class Fun(discord.ext.commands.Cog): #Fun stuff
             await ctx.send(f"{ctx.author.mention}\n`//saper <size> <level>`")
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to play minesweeper")
 
-
-
 class Dnd(discord.ext.commands.Cog, name = "DnD"): #Dungeons & Dragons stuff
     def __init__(self, RAKBOT):
         self.RAKBOT = RAKBOT
-
 
     @discord.ext.commands.command(pass_context = True, description = "[amount]<k/d><sides>[+multiplier] [dis/advantage]")
     async def dice(self, ctx, dice: str, bonus = None): #Dice roll command
@@ -322,7 +325,6 @@ class Dnd(discord.ext.commands.Cog, name = "DnD"): #Dungeons & Dragons stuff
         if isinstance(error, discord.ext.commands.MissingRequiredArgument):
             await ctx.send(f"{ctx.author.mention}\n`//dice <amount of dices><k/d><type of dice>+<multiplier> <dis/advantage>`")
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to roll a dice")
-
 
     @discord.ext.commands.command(pass_context = True, aliases = ["gs"])
     async def generateStats(self, ctx): #Generate random stats command

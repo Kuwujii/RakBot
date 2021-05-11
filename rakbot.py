@@ -3,7 +3,7 @@ import pymongo #MongoDB controller
 import configparser, pathlib, random #Other stuff
 import cogs.rakbotbase #Base cog
 
-if __name__ == "__main__": #Must be main file
+def main(): #Main function
     ini = configparser.ConfigParser()
     ini.read(pathlib.Path(__file__).parent.absolute()/"rakbot.ini") #Open ini
 
@@ -15,3 +15,6 @@ if __name__ == "__main__": #Must be main file
     RAKBOT.add_cog(cogs.rakbotbase.RakBotBase(RAKBOT, MONGO, SERVER_SETTINGS))
     
     asyncio.get_event_loop().run_until_complete(RAKBOT.start(ini.get("General", "Token"))) #Login
+
+if __name__ == "__main__":
+    main()

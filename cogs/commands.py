@@ -102,13 +102,25 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to set a new language for the server {ctx.guild.name}")
 
-    @discord.ext.commands.command(pass_context = True, name = "shout")
-    async def shout(self, ctx, member: discord.Member):
+    @discord.ext.commands.command(pass_context = True, 
+    aliases = list(set([ #Remove duplicates and assign them
+        json.load(open(f"./lang/{lang_file_name}"))["tools"]["shout"]["name"] for lang_file_name in os.listdir("./lang") 
+            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["shout"]["name"] != "shout" #Generate a list of names from all languages. Exclude default name
+    ] + [ #Merge the two lists
+        alias for lang_file_name in os.listdir("./lang") 
+            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["shout"]["aliases"] #Generate a list of aliases from all languages
+    ])))
+    async def shout(self, ctx, member: discord.Member): #Command to spam a user to wake them up
         self.RAKBOT.get_cog("Background").start_shouting_at(member)
-        await ctx.send(f"Hey {member.mention}, wake up!")
+
+        file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
+        message_parts = json.load(file)["tools"]["shout"]["message"].split("{member.mention}")
+        await ctx.send(message_parts[0]+member.mention+message_parts[1]) #Send correct message
+        file.close()
+
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) shouts at {member.display_name} ({member})")
 
-    @discord.ext.commands.command(pass_context = True, name = "quiet")
+    @discord.ext.commands.command(pass_context = True, name = "quiet") #Command to stop the bot from spamming a user
     async def quiet(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author

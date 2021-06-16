@@ -13,11 +13,11 @@ class Background(discord.ext.commands.Cog): #Define cog class
         self.status_loop.cancel()
         self.shout_loop.cancel()
 
-    def start_shouting_at(self, member):
+    def start_shouting_at(self, member): #Add user to list of users to wake up
         if member not in self.SHOUT_AT:
             self.SHOUT_AT.append(member)
 
-    def stop_shouting_at(self, member):
+    def stop_shouting_at(self, member): #Remove user from list of users to wake up
         if member in self.SHOUT_AT:
             self.SHOUT_AT.remove(member)
 
@@ -33,7 +33,7 @@ class Background(discord.ext.commands.Cog): #Define cog class
         await self.RAKBOT.wait_until_ready()
 
     @discord.ext.tasks.loop(seconds = 1.0)
-    async def shout_loop(self):
+    async def shout_loop(self): #Loop that tries to wake up certain list of users
         for member in self.SHOUT_AT:
             await member.send("Hey, wake up")
 

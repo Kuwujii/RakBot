@@ -25,6 +25,11 @@
                 "message": "サーバー言語は日本語（日本）に設定されました",
                 "error": "選ばれた言語は現在サポートされていません"
             }
+        },
+        "shout": {
+            "name": "shout",
+            "aliases": ["call"],
+            "message": "Hey {member.mention}, wake up!"
         }
     }
 }

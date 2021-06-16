@@ -25,6 +25,11 @@
                 "message": "Server language set to English (Australia)",
                 "error": "Choosen language isn't supported"
             }
+        },
+        "shout": {
+            "name": "shout",
+            "aliases": ["call"],
+            "message": "Hey {member.mention}, wake up!"
         }
     }
 }

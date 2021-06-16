@@ -25,6 +25,11 @@
                 "message": "Gŏdka serwera ôstoł ustawiōny na Ślōnski (Polsko)",
                 "error": "Ôbranŏ gŏdka niyma ôbsugowany"
             }
+        },
+        "shout": {
+            "name": "wołej",
+            "aliases": [],
+            "message": "Te {member.mention}, stŏwej!"
         }
     }
 }

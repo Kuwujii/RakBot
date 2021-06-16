@@ -25,6 +25,11 @@
                 "message": "Język serwera został ustawiony na Polski (Polska)",
                 "error": "Wybrany język nie jest obsługiwany"
             }
+        },
+        "shout": {
+            "name": "wołaj",
+            "aliases": [],
+            "message": "Hej {member.mention}, wstawaj!"
         }
     }
 }

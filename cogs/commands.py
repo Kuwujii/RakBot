@@ -120,14 +120,29 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) shouts at {member.display_name} ({member})")
 
-    @discord.ext.commands.command(pass_context = True, name = "quiet") #Command to stop the bot from spamming a user
+    @discord.ext.commands.command(pass_context = True, 
+    aliases = list(set([ #Remove duplicates and assign them
+        json.load(open(f"./lang/{lang_file_name}"))["tools"]["quiet"]["name"] for lang_file_name in os.listdir("./lang") 
+            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["quiet"]["name"] != "quiet" #Generate a list of names from all languages. Exclude default name
+    ] + [ #Merge the two lists
+        alias for lang_file_name in os.listdir("./lang") 
+            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["quiet"]["aliases"] #Generate a list of aliases from all languages
+    ]))) #Command to stop the bot from spamming a user
     async def quiet(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author
-            await ctx.send("Ok")
+
+            file = open(f"../lang/{language}.json")
+            await ctx.send(json.load(file)["tools"]["language"]["quiet"]["message-self"])
+            file.close()
+
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) showed up and wanted me to stop shouting")
         else:
-            await ctx.send(f"Hey {member.mention}, no need to wake up anymore")
+            file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
+            message_parts = json.load(file)["tools"]["quiet"]["message-others"].split("{member.mention}")
+            await ctx.send(message_parts[0]+member.mention+message_parts[1]) #Send correct message
+            file.close()
+
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) stops shouting at {member.display_name} ({member})")
         self.RAKBOT.get_cog("Background").stop_shouting_at(member)
 

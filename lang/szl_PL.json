@@ -30,6 +30,12 @@
             "name": "wołej",
             "aliases": [],
             "message": "Te {member.mention}, stŏwej!"
+        },
+        "quiet": {
+            "name": "ciszyna",
+            "aliases": [],
+            "message-self": "Kol",
+            "message-others": "Te {member.mention}, niy musisz już stŏwać"
         }
     }
 }

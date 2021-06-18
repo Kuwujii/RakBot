@@ -30,6 +30,12 @@
             "name": "shout",
             "aliases": ["call"],
             "message": "Hey {member.mention}, wake up!"
+        },
+        "quiet": {
+            "name": "quiet",
+            "aliases": [],
+            "message-self": "Ok",
+            "message-others": "Hey {member.mention}, no need to wake up anymore"
         }
     }
 }

@@ -30,6 +30,12 @@
             "name": "wołaj",
             "aliases": [],
             "message": "Hej {member.mention}, wstawaj!"
+        },
+        "quiet": {
+            "name": "cisza",
+            "aliases": [],
+            "message-self": "Ok",
+            "message-others": "Hej {member.mention}, nie musisz już wstawać"
         }
     }
 }

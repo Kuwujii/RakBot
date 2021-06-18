@@ -132,8 +132,8 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         if member == None:
             member = ctx.author
 
-            file = open(f"../lang/{language}.json")
-            await ctx.send(json.load(file)["tools"]["language"]["quiet"]["message-self"])
+            file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
+            await ctx.send(json.load(file)["tools"]["quiet"]["message-self"]) #Send correct message
             file.close()
 
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) showed up and wanted me to stop shouting")

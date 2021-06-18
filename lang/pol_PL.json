@@ -6,13 +6,13 @@
         "name": "Narzędzia",
         "off": {
             "name": "wyłącz",
-            "aliases": ["wył"],
+            "aliases": ["wylacz", "wył"],
             "message": "Wyłączanie...",
             "error": "Nie jesteś do tego upoważniony"
         },
         "language": {
             "name": "język",
-            "aliases": [],
+            "aliases": ["jezyk"],
             "message": "Język serwera jest ustawiony na: Polski (Polska)",
             "list": {
                 "name": "lista",
@@ -28,7 +28,7 @@
         },
         "shout": {
             "name": "wołaj",
-            "aliases": [],
+            "aliases": ["wolaj"],
             "message": "Hej {member.mention}, wstawaj!"
         },
         "quiet": {

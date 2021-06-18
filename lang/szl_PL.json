@@ -6,13 +6,13 @@
         "name": "Nŏczyniŏ",
         "off": {
             "name": "wyłōncz",
-            "aliases": ["wył"],
+            "aliases": ["wyloncz", "wył"],
             "message": "Wyłōnczanie...",
             "error": "Niy je żeś do tego upoważniōny"
         },
         "language": {
             "name": "gŏdka",
-            "aliases": [],
+            "aliases": ["godka"],
             "message": "Gŏdka serwera je ustawiōny na: Ślůnski (Polsko)",
             "list": {
                 "name": "lista",
@@ -28,7 +28,7 @@
         },
         "shout": {
             "name": "wołej",
-            "aliases": [],
+            "aliases": ["wolej"],
             "message": "Te {member.mention}, stŏwej!"
         },
         "quiet": {

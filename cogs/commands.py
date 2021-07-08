@@ -8,14 +8,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         self.MONGO = MONGO
         self.SERVER_SETTINGS = SERVER_SETTINGS
 
-    @discord.ext.commands.command(pass_context = True, 
-    aliases = list(set([ #Remove duplicates and assign them
-        json.load(open(f"./lang/{lang_file_name}"))["tools"]["off"]["name"] for lang_file_name in os.listdir("./lang") 
-            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["off"]["name"] != "off" #Generate a list of names from all languages. Exclude default name
-    ] + [ #Merge the two lists
-        alias for lang_file_name in os.listdir("./lang") 
-            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["off"]["aliases"] #Generate a list of aliases from all languages
-    ])))
+    @discord.ext.commands.command(pass_context = True)
     @discord.ext.commands.is_owner() #If owner
     async def off(self, ctx): #Turn off comand
         file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
@@ -35,14 +28,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) got angry and tried to turn me off")
 
-    @discord.ext.commands.group(pass_context = True, invoke_without_command = True,
-    aliases = list(set([ #Remove duplicates and assign them
-        json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["name"] for lang_file_name in os.listdir("./lang") 
-            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["name"] != "language" #Generate a list of names from all languages. Exclude default name
-    ] + [ #Merge the two lists
-        alias for lang_file_name in os.listdir("./lang") 
-            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["aliases"] #Generate a list of aliases from all languages
-    ])))
+    @discord.ext.commands.group(pass_context = True, invoke_without_command = True)
     async def language(self, ctx): #Check the language of the server
         file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
         await ctx.send(json.load(file)["tools"]["language"]["message"]) #Send correct message
@@ -50,14 +36,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) checked the language of the {ctx.guild.name} server")
 
-    @language.command(pass_context = True, name = "list",
-    aliases = list(set([ #Remove duplicates and assign them
-        json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["list"]["name"] for lang_file_name in os.listdir("./lang") 
-            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["list"]["name"] != "list" #Generate a list of names from all languages. Exclude default name
-    ] + [ #Merge the two lists
-        alias for lang_file_name in os.listdir("./lang") 
-            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["list"]["aliases"] #Generate a list of aliases from all languages
-    ])))
+    @language.command(pass_context = True, name = "list")
     @discord.ext.commands.has_permissions(administrator = True)
     async def language_list(self, ctx): #Check all the available languages
         e = discord.Embed(colour = 0xFF6D00) #Declare embed
@@ -77,14 +56,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
         await ctx.send(embed = e) #Send it
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) asked for list of languages")
 
-    @language.command(pass_context = True, name = "set",
-    aliases = list(set([ #Remove duplicates and assign them
-        json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["set"]["name"] for lang_file_name in os.listdir("./lang") 
-            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["set"]["name"] != "set" #Generate a list of names from all languages. Exclude default name
-    ] + [ #Merge the two lists
-        alias for lang_file_name in os.listdir("./lang") 
-            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["language"]["set"]["aliases"] #Generate a list of aliases from all languages
-    ])))
+    @language.command(pass_context = True, name = "set")
     @discord.ext.commands.has_permissions(administrator = True)
     async def language_set(self, ctx, language: str): #Set the language for the current server
         if f"{language}.json" in os.listdir("../lang"): #If the language exists
@@ -102,14 +74,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
             cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) failed to set a new language for the server {ctx.guild.name}")
 
-    @discord.ext.commands.command(pass_context = True, 
-    aliases = list(set([ #Remove duplicates and assign them
-        json.load(open(f"./lang/{lang_file_name}"))["tools"]["shout"]["name"] for lang_file_name in os.listdir("./lang") 
-            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["shout"]["name"] != "shout" #Generate a list of names from all languages. Exclude default name
-    ] + [ #Merge the two lists
-        alias for lang_file_name in os.listdir("./lang") 
-            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["shout"]["aliases"] #Generate a list of aliases from all languages
-    ])))
+    @discord.ext.commands.command(pass_context = True)
     async def shout(self, ctx, member: discord.Member): #Command to spam a user to wake them up
         self.RAKBOT.get_cog("Background").start_shouting_at(member)
 
@@ -120,14 +85,7 @@ class Tools(discord.ext.commands.Cog): #Admin tools stuffS
 
         cogs.rakbotbase.Functions().write_log(f"{ctx.author.display_name} ({ctx.author}) shouts at {member.display_name} ({member})")
 
-    @discord.ext.commands.command(pass_context = True, 
-    aliases = list(set([ #Remove duplicates and assign them
-        json.load(open(f"./lang/{lang_file_name}"))["tools"]["quiet"]["name"] for lang_file_name in os.listdir("./lang") 
-            if json.load(open(f"./lang/{lang_file_name}"))["tools"]["quiet"]["name"] != "quiet" #Generate a list of names from all languages. Exclude default name
-    ] + [ #Merge the two lists
-        alias for lang_file_name in os.listdir("./lang") 
-            for alias in json.load(open(f"./lang/{lang_file_name}"))["tools"]["quiet"]["aliases"] #Generate a list of aliases from all languages
-    ]))) #Command to stop the bot from spamming a user
+    @discord.ext.commands.command(pass_context = True) #Command to stop the bot from spamming a user
     async def quiet(self, ctx, member: discord.Member = None):
         if member == None:
             member = ctx.author

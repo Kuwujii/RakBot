@@ -1,20 +1,30 @@
-import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wrapper, Commands Framework, Background loop Framework and Asyncio library
+import lightbulb #Discord API Wrapper (hikari) and it's Commands Framework (lightbulb)
 import pymongo #MongoDB controller
-import configparser, pathlib, random #Other stuff
-import cogs.rakbotbase #Base cog
+import configparser, pathlib
 
-def main(): #Main function
-    ini = configparser.ConfigParser()
-    ini.read(pathlib.Path(__file__).parent.absolute()/"rakbot.ini") #Open ini
+RAKBOT = None #Create globals for the bot and database
+MONGO = None
+SERVER_SETTINGS = None
 
-    MONGO = pymongo.MongoClient(ini.get("Database", "MongoConnectionString")) #connect to the given database
+def main():
+    global RAKBOT, MONGO, SERVER_SETTINGS
+
+    ini = configparser.ConfigParser() #Read the config file
+    ini.read(pathlib.Path(__file__).parent.absolute()/"rakbot.ini")
+
+    MONGO = pymongo.MongoClient(ini.get("Database", "MongoConnectionString")) #connect to the database
     database = MONGO[ini.get("Database", "DatabaseName")]
     SERVER_SETTINGS = database[ini.get("Database", "ServerSettingsCollectionName")]
 
-    RAKBOT = discord.ext.commands.Bot(ini.get("General", "CommandPrefix"), help_command = None) #Decare the bot         
-    RAKBOT.add_cog(cogs.rakbotbase.RakBotBase(RAKBOT, MONGO, SERVER_SETTINGS))
-    
-    asyncio.get_event_loop().run_until_complete(RAKBOT.start(ini.get("General", "Token"))) #Login
+    RAKBOT = lightbulb.BotApp(
+        ini.get("General", "Token"),
+        default_enabled_guilds = int(ini.get("General", "DefauldGuildID")),
+        help_slash_command = True,
+        prefix = ini.get("General", "CommandPrefix")
+    ) #Declare and run the bot
+
+    RAKBOT.run()
+
 
 if __name__ == "__main__":
     main()

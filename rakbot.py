@@ -1,6 +1,6 @@
 import lightbulb #Discord API Wrapper (hikari) and it's Commands Framework (lightbulb)
 import pymongo #MongoDB controller
-import configparser, pathlib, colorlog, logging, time
+import configparser, pathlib, time
 
 RAKBOT = None #Create globals for the bot and database
 MONGO = None
@@ -14,7 +14,7 @@ def main():
 
     MONGO = pymongo.MongoClient(ini.get("Database", "MongoConnectionString")) #connect to the database
     database = MONGO[ini.get("Database", "DatabaseName")]
-    SERVER_SETTINGS = database[ini.get("Database", "ServerSettingsCollectionName")] #colorlog.info(f"Running {RAKBOT.get_me().username} on RakBot core v0.0.2")
+    SERVER_SETTINGS = database[ini.get("Database", "ServerSettingsCollectionName")]
 
     RAKBOT = lightbulb.BotApp(
         ini.get("General", "Token"),

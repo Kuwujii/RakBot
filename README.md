@@ -1,7 +1,7 @@
 # RakBot
 
 ## Current Features
-(Not available untill I finish moving from discord.py to Hikari)
+*(Not available untill I finish moving from discord.py to Hikari)*
 - Support for the bot having different language for command outputs on every server. (Currently supported: English (UK, US and AU), Polish, Silesian and Japanese)
 - Waking up that one friend who hibernates on VC
 - Crabsweeper on a text channel

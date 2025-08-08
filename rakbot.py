@@ -1,10 +1,15 @@
-import lightbulb #Discord API Wrapper (hikari) and it's Commands Framework (lightbulb)
+import discord, discord.ext.commands, discord.ext.tasks #discord.py, API wrapper
 import pymongo #MongoDB controller
-import configparser, pathlib, time
+import configparser, pathlib
+import cogs.rakbotbase
 
 RAKBOT = None #Create globals for the bot and database
 MONGO = None
 SERVER_SETTINGS = None
+
+class RakBot(discord.ext.commands.Bot):
+    async def setup_hook(self):
+        await self.add_cog(cogs.rakbotbase.RakBotBase(RAKBOT, MONGO, SERVER_SETTINGS))
 
 def main():
     global RAKBOT, MONGO, SERVER_SETTINGS
@@ -16,48 +21,10 @@ def main():
     database = MONGO[ini.get("Database", "DatabaseName")]
     SERVER_SETTINGS = database[ini.get("Database", "ServerSettingsCollectionName")]
 
-    RAKBOT = lightbulb.BotApp(
-        ini.get("General", "Token"),
-        default_enabled_guilds = int(ini.get("General", "DefauldGuildID")),
-        help_slash_command = True,
-        prefix = ini.get("General", "CommandPrefix"),
-        banner = None,
-        logs = {
-            "version": 1,
-            "disable_existing_loggers": False,
-            "formatters": {
-                "coloured": {
-                    "class": "colorlog.ColoredFormatter",
-                    "datefmt": "%d/%m/%Y %H:%M:%S",
-                    "format": "%(log_color)s[%(levelname)s] %(asctime)s: %(message)s"
-                },
-                "basic": {
-                    "class": "logging.Formatter",
-                    "datefmt": "%d/%m/%Y %H:%M:%S",
-                    "format": "[%(levelname)s] %(asctime)s: %(message)s"
-                }
-            },
-            "handlers": {
-                "console": {
-                    "class": "colorlog.StreamHandler",
-                    "formatter": "coloured",
-                    "level": "DEBUG"
-                },
-                "file": {
-                    "class": "logging.FileHandler",
-                    "filename": f"logs\\{time.strftime('%d-%m-%Y_%H-%M-%S')}.log",
-                    "formatter": "basic",
-                    "level": "DEBUG"
-                }
-            },
-            "root": {
-                "handlers": ["console", "file"],
-                "level": "DEBUG"
-            }
-        } #Logger configuration
-    ) #Declare and run the bot
+    RAKBOT = RakBot(command_prefix='!', intents = discord.Intents.default(), help_command = None)
+    tree = RAKBOT.tree
 
-    RAKBOT.run()
+    RAKBOT.run(ini.get("General", "Token"))
 
 if __name__ == "__main__":
     main()

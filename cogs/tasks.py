@@ -6,8 +6,8 @@ class Background(discord.ext.commands.Cog): #Define cog class
         self.RAKBOT = RAKBOT
         self.SHOUT_AT = []
 
-        self.status_loop.start() #Start the loops
-        self.shout_loop.start()
+        #self.status_loop.start() #Start the loops
+        #self.shout_loop.start()
 
     def cog_unload(self):
         self.status_loop.cancel()

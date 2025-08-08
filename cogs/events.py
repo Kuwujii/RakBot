@@ -6,11 +6,6 @@ class Events(discord.ext.commands.Cog): #Define cog class
         self.RAKBOT = RAKBOT
         self.SERVER_SETTINGS = SERVER_SETTINGS
 
-    @discord.ext.commands.Cog.listener() #On ready event
-    async def on_ready(self):
-        await self.RAKBOT.wait_until_ready()
-        cogs.rakbotbase.Functions().write_log(f"Running {self.RAKBOT.user.name} on RakBot core v0.0.1")
-
     @discord.ext.commands.Cog.listener() #Set default language as British English when joining the server
     async def on_guild_join(self, guild):
         self.SERVER_SETTINGS.insert_one({"_id": guild.id, "language": "en_GB"})

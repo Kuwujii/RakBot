@@ -1,18 +1,19 @@
 import discord, discord.ext.commands, discord.ext.tasks, asyncio #Discord API Wrapper, Commands Framework, Background loop Framework and Asyncio library
 import json, glob, os, re, random, num2words #Other stuff
 import cogs.rakbotbase #Basic cog
+import rakbot
 
-class Tools(discord.ext.commands.Cog): #Admin tools stuffS
+class Tools(discord.ext.commands.Cog): #Admin tools stuffs
     def __init__(self, RAKBOT, MONGO, SERVER_SETTINGS):
         self.RAKBOT = RAKBOT
         self.MONGO = MONGO
         self.SERVER_SETTINGS = SERVER_SETTINGS
 
-    @discord.ext.commands.command(pass_context = True)
+    @discord.app_commands.command(name = "off", description = "Turn off the bot")
     @discord.ext.commands.is_owner() #If owner
-    async def off(self, ctx): #Turn off comand
-        file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': ctx.guild.id})['language']}.json") #Get server language
-        await ctx.send(json.load(file)["tools"]["off"]["message"]) #Send correct message
+    async def off(self, interaction: discord.Interaction): #Turn off comand
+        file = open(f"../lang/{self.SERVER_SETTINGS.find_one({'_id': interaction.guild_id})['language']}.json") #Get server language
+        await interaction.response.send_message(json.load(file)["tools"]["off"]["message"]) #Send correct message
         file.close()
 
         cogs.rakbotbase.Functions().write_log("Turning off") #Send logs

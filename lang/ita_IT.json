@@ -1,0 +1,41 @@
+{
+    "language": "Italiano",
+    "region": "Italia",
+    "icon": "🇮🇹",
+    "tools": {
+        "name": "Strumenti",
+        "off": {
+            "name": "spento",
+            "aliases": [],
+            "message": "Spegnendo ora...",
+            "error": "Non hai l'autorizzazione per eseguire questa azione"
+        },
+        "language": {
+            "name": "lingua",
+            "aliases": ["lingua"],
+            "message": "La lingua del server è impostata su: Italiano",
+            "list": {
+                "name": "elenco",
+                "aliases": ["e"],
+                "message": "Lingue disponibili"
+            },
+            "set": {
+                "name": "impostare",
+                "aliases": ["i"],
+                "message": "La lingua del server è impostata su: Italiano (Italia)",
+                "error": "La lingua selezionata non è supportata"
+            }
+        },
+        "shout": {
+            "name": "gridare",
+            "aliases": ["chiamare"],
+            "message": "Ehi {member.mention}, svegliati!"
+        },
+        "quiet": {
+            "name": "silenzioso",
+            "aliases": [],
+            "message-self": "Ok",
+            "message-others": "Ehi {member.mention}, non ti preoccupare di svegliare più"
+        }
+    }
+}

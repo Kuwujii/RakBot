@@ -6,7 +6,7 @@
         "name": "Narzędzia",
         "off": {
             "name": "wyłącz",
-            "aliases": ["wylacz", "wył"],
+            "aliases": ["wylacz", "wył", "wyl"],
             "message": "Wyłączanie...",
             "error": "Nie jesteś do tego upoważniony"
         },

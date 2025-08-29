@@ -14,13 +14,17 @@ class RakBotBase(discord.ext.commands.Cog): #Define cog class
 
     @discord.ext.commands.Cog.listener() #On ready event
     async def on_ready(self):
+        # for g in self.RAKBOT.guilds:
+        #     self.RAKBOT.tree.clear_commands(guild = g)
+        #     await self.RAKBOT.tree.sync(guild = g)
+
         await self.RAKBOT.add_cog(cogs.tasks.Background(self.RAKBOT)) #Run other cogs
         
         await self.RAKBOT.add_cog(cogs.events.Events(self.RAKBOT, self.SERVER_SETTINGS))
         
         await self.RAKBOT.add_cog(cogs.commands.Tools(self.RAKBOT, self.MONGO, self.SERVER_SETTINGS))
-        await self.RAKBOT.add_cog(cogs.commands.Fun(self.RAKBOT))
-        await self.RAKBOT.add_cog(cogs.commands.Dnd(self.RAKBOT))
+        # await self.RAKBOT.add_cog(cogs.commands.Fun(self.RAKBOT))
+        # await self.RAKBOT.add_cog(cogs.commands.Dnd(self.RAKBOT))
 
         await self.RAKBOT.tree.sync()
 

@@ -15,5 +15,5 @@
 
 ## Special thanks
 
-**Osura ([Github](https://github.com/0sura))** - Adding some functionalities, corrections in the English locale and creating Japanese locale
-**[NavelGaze] ([Bandcamp](https://navelgaze.bandcamp.com/); [Spotify](https://open.spotify.com/artist/6CsWIXLVHHuVmSOUfz7QE5?si=Y52BwO78TnOPwa_a3wDQ1A)) - Italian translation
+**Osura** ([Github](https://github.com/0sura)) - Adding some functionalities, corrections in the English locale and creating Japanese locale
+**NavelGaze** ([Bandcamp](https://navelgaze.bandcamp.com/); [Spotify](https://open.spotify.com/artist/6CsWIXLVHHuVmSOUfz7QE5?si=Y52BwO78TnOPwa_a3wDQ1A)) - Italian translation

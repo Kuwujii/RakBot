@@ -8,7 +8,7 @@ class Events(discord.ext.commands.Cog): #Define cog class
 
     @discord.ext.commands.Cog.listener() #Set default language as British English when joining the server
     async def on_guild_join(self, guild):
-        self.SERVER_SETTINGS.insert_one({"_id": guild.id, "language": "en_GB"})
+        self.SERVER_SETTINGS.insert_one({"_id": guild.id, "language": "eng_GB"})
         cogs.rakbotbase.Functions().write_log(f"Got invited to {guild.name} server")
 
     @discord.ext.commands.Cog.listener() #Remove server settings when kicked from it

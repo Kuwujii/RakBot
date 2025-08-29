@@ -22,7 +22,6 @@ def main():
     SERVER_SETTINGS = database[ini.get("Database", "ServerSettingsCollectionName")]
 
     RAKBOT = RakBot(command_prefix='!', intents = discord.Intents.default(), help_command = None)
-    tree = RAKBOT.tree
 
     RAKBOT.run(ini.get("General", "Token"))
 

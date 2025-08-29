@@ -6,8 +6,8 @@ class Background(discord.ext.commands.Cog): #Define cog class
         self.RAKBOT = RAKBOT
         self.SHOUT_AT = []
 
-        #self.status_loop.start() #Start the loops
-        #self.shout_loop.start()
+        self.status_loop.start() #Start the loops
+        self.shout_loop.start()
 
     def cog_unload(self):
         self.status_loop.cancel()
@@ -26,7 +26,7 @@ class Background(discord.ext.commands.Cog): #Define cog class
         await self.RAKBOT.change_presence(activity = discord.Game(name = random.choice([
             f"monitoring {len(self.RAKBOT.guilds)} servers",
             "with a ban hammer"
-            ])))
+        ])))
 
     @status_loop.before_loop
     async def before_status_loop(self): #Make the status loop wait for the bot to get ready to work
@@ -35,7 +35,7 @@ class Background(discord.ext.commands.Cog): #Define cog class
     @discord.ext.tasks.loop(seconds = 1.0)
     async def shout_loop(self): #Loop that tries to wake up certain list of users
         for member in self.SHOUT_AT:
-            await member.send("Hey, wake up")
+            await member.send("Hey, wake up") #TODO
 
     @shout_loop.before_loop
     async def before_shout_loop(self):
